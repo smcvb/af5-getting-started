@@ -28,6 +28,7 @@ class CreateCourseTest {
                .when()
                .command(new CreateCourseCommand(COURSE_ID, NAME, CAPACITY))
                .then()
+               .success()
                .events(new CourseCreatedEvent(COURSE_ID, NAME, CAPACITY));
     }
 
@@ -38,6 +39,7 @@ class CreateCourseTest {
                .when()
                .command(new CreateCourseCommand(COURSE_ID, NAME, CAPACITY))
                .then()
+               .success()
                .noEvents();
     }
 }
