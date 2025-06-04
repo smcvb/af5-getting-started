@@ -2,7 +2,7 @@ package io.axoniq.demo.university.faculty.write.createcourse;
 
 import java.util.UUID;
 
-public class CreateCourseState {
+class CreateCourseState {
 
     private UUID id;
 

@@ -3,7 +3,7 @@ package io.axoniq.demo.university.faculty.write.createcourse;
 import io.axoniq.demo.university.faculty.events.CourseCreatedEvent;
 import org.axonframework.eventhandling.gateway.EventAppender;
 
-public class CreateCourseCommandHandler {
+class CreateCourseCommandHandler {
 
     public void handle(CreateCourseCommand command,
                        EventAppender appender,
