@@ -30,4 +30,14 @@ class CreateCourseTest {
                .then()
                .events(new CourseCreatedEvent(COURSE_ID, NAME, CAPACITY));
     }
+
+    @Test
+    void givenCourseCreatedWhenCreateCourseForSameIdThenNoEvents() {
+        fixture.given()
+               .events(new CourseCreatedEvent(COURSE_ID, NAME, CAPACITY))
+               .when()
+               .command(new CreateCourseCommand(COURSE_ID, NAME, CAPACITY))
+               .then()
+               .noEvents();
+    }
 }
