@@ -24,6 +24,6 @@ public class AxonUniversity {
     private static void describe(AxonConfiguration axonConfig) {
         ComponentDescriptor componentDescriptor = new FilesystemStyleComponentDescriptor();
         axonConfig.describeTo(componentDescriptor);
-        logger.info(componentDescriptor.toString());
+        logger.info(componentDescriptor.describe());
     }
 }
