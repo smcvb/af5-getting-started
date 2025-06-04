@@ -16,6 +16,7 @@
         <!-- Logging -->
         <log4j.version>2.24.3</log4j.version>
         <!-- Test -->
+        <hamcrest.version>3.0</hamcrest.version>
         <junit.version>5.12.2</junit.version>
         <!-- Build -->
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
@@ -63,6 +64,12 @@
             <version>${log4j.version}</version>
         </dependency>
         <!-- Test Dependencies -->
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>${hamcrest.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
