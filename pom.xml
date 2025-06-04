@@ -45,7 +45,6 @@
             <groupId>org.axonframework</groupId>
             <artifactId>axon-test</artifactId>
             <version>${axon.version}</version>
-            <scope>test</scope>
         </dependency>
         <!-- Logging Dependencies -->
         <dependency>
