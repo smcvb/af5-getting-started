@@ -1,12 +1,15 @@
 package io.axoniq.demo.university;
 
+import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseCommand;
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseConfiguration;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.common.infra.ComponentDescriptor;
 import org.axonframework.common.infra.FilesystemStyleComponentDescriptor;
 import org.axonframework.configuration.AxonConfiguration;
 import org.axonframework.eventsourcing.configuration.EventSourcingConfigurer;
 
 import java.lang.invoke.MethodHandles;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class AxonUniversity {
@@ -16,6 +19,7 @@ public class AxonUniversity {
     public static void main(String[] args) {
         AxonConfiguration axonConfig = mainConfigurer().build();
         describe(axonConfig);
+        testRun(axonConfig);
     }
 
     public static EventSourcingConfigurer mainConfigurer() {
@@ -29,5 +33,37 @@ public class AxonUniversity {
         ComponentDescriptor componentDescriptor = new FilesystemStyleComponentDescriptor();
         axonConfig.describeTo(componentDescriptor);
         logger.info(componentDescriptor.describe());
+    }
+
+    private static void testRun(AxonConfiguration axonConfig) {
+        axonConfig.start();
+        CommandGateway commandGateway = axonConfig.getComponent(CommandGateway.class);
+
+        UUID courseId = UUID.randomUUID();
+        successfulCreateCourseRun(commandGateway, courseId);
+        faultyCreateCourseRun(commandGateway, courseId);
+    }
+
+    private static void successfulCreateCourseRun(CommandGateway commandGateway, UUID courseId) {
+        logger.info("Starting successful create course flow...");
+        UUID resultingCourseId =
+                commandGateway.send(new CreateCourseCommand(courseId, "AF5 Getting Started", 10), null, UUID.class)
+                              .join();
+        if (resultingCourseId.equals(courseId)) {
+            logger.info("Same course id returned!");
+        } else {
+            logger.warning("Something went wrong in the create course flow...");
+        }
+    }
+
+    private static void faultyCreateCourseRun(CommandGateway commandGateway, UUID courseId) {
+        logger.info("Starting create course duplication flow...");
+        try {
+            commandGateway.send(new CreateCourseCommand(courseId, "AF5 Getting Started", 10), null, UUID.class)
+                          .join();
+            logger.warning("Something went wrong in the create course duplication flow...");
+        } catch (Exception e) {
+            logger.info("Could not create another course with the same identifier, as expected!");
+        }
     }
 }
