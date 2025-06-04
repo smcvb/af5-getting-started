@@ -1,12 +1,14 @@
 package io.axoniq.demo.university.faculty.write.createcourse;
 
 import io.axoniq.demo.university.faculty.events.CourseCreatedEvent;
+import org.axonframework.commandhandling.GenericCommandResultMessage;
 import org.axonframework.configuration.Configuration;
 import org.axonframework.eventhandling.gateway.EventAppender;
 import org.axonframework.eventsourcing.configuration.EventSourcedEntityBuilder;
 import org.axonframework.eventsourcing.eventstore.EventCriteria;
 import org.axonframework.eventsourcing.eventstore.Tag;
 import org.axonframework.messaging.MessageStream;
+import org.axonframework.messaging.MessageType;
 import org.axonframework.messaging.QualifiedName;
 import org.axonframework.modelling.command.StatefulCommandHandler;
 import org.axonframework.modelling.configuration.StatefulCommandHandlingModule;
@@ -49,9 +51,12 @@ public class CreateCourseConfiguration {
                 return MessageStream.failed(e);
             }
 
-            commandHandler.handle(commandPayload, appender, createCourseState);
-
-            return MessageStream.just(null);
+            try {
+                UUID courseId = commandHandler.handle(commandPayload, appender, createCourseState);
+                return MessageStream.just(new GenericCommandResultMessage<>(new MessageType("id"), courseId));
+            } catch (Exception e) {
+                return MessageStream.failed(e);
+            }
         };
     }
 
