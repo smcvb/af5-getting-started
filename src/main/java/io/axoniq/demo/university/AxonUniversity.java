@@ -1,5 +1,6 @@
 package io.axoniq.demo.university;
 
+import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseConfiguration;
 import org.axonframework.common.infra.ComponentDescriptor;
 import org.axonframework.common.infra.FilesystemStyleComponentDescriptor;
 import org.axonframework.configuration.AxonConfiguration;
@@ -18,7 +19,10 @@ public class AxonUniversity {
     }
 
     public static EventSourcingConfigurer mainConfigurer() {
-        return EventSourcingConfigurer.create();
+        return EventSourcingConfigurer.create()
+                                      .registerStatefulCommandHandlingModule(
+                                              CreateCourseConfiguration.createCourseCommandModule()
+                                      );
     }
 
     private static void describe(AxonConfiguration axonConfig) {
