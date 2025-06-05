@@ -2,6 +2,7 @@ package io.axoniq.demo.university;
 
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseCommand;
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseConfiguration;
+import io.axoniq.demo.university.faculty.write.subscribestudent.SubscribeStudentToCourseConfiguration;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.common.infra.ComponentDescriptor;
 import org.axonframework.common.infra.FilesystemStyleComponentDescriptor;
@@ -26,6 +27,9 @@ public class AxonUniversity {
         return EventSourcingConfigurer.create()
                                       .registerStatefulCommandHandlingModule(
                                               CreateCourseConfiguration.createCourseCommandModule()
+                                      )
+                                      .registerStatefulCommandHandlingModule(
+                                              SubscribeStudentToCourseConfiguration.statefulCommandHandlingModule()
                                       );
     }
 
