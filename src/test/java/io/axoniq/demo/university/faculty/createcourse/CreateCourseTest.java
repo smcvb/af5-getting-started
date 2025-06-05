@@ -39,7 +39,6 @@ class CreateCourseTest {
                .when()
                .command(new CreateCourseCommand(COURSE_ID, NAME, CAPACITY))
                .then()
-               .success()
-               .noEvents();
+               .exception(IllegalArgumentException.class, "Course identifier already in use!");
     }
 }
