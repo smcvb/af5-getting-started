@@ -13,10 +13,10 @@ class SubscribeStudentToCourseCommandHandler {
     public void decide(SubscribeStudentToCourseCommand command,
                        @InjectEntity SubscribeStudentState state,
                        EventAppender appender) {
-        assertStudentEnrolledInFaculty(state);
-        assertStudentAlreadySubscribed(state);
-        assertCourseStillHasCapacity(state);
-        assertStudentHasTimeInSchedule(state);
+//        assertStudentEnrolledInFaculty(state);
+//        assertStudentAlreadySubscribed(state);
+//        assertCourseStillHasCapacity(state);
+//        assertStudentHasTimeInSchedule(state);
 
         appender.append(new StudentSubscribedToCourseEvent(command.studentId(), command.courseId()));
     }
