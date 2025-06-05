@@ -54,4 +54,16 @@ public class SubscribeStudentState {
             this.alreadySubscribedToThisCourse = true;
         }
     }
+
+    public boolean alreadySubscribed() {
+        return this.alreadySubscribedToThisCourse;
+    }
+
+    public boolean courseHasSufficientCapacity() {
+        return subscribedStudentsCount < capacity;
+    }
+
+    public boolean studentHasNoMoreTime() {
+        return subscribedToCoursesCount >= 3;
+    }
 }
