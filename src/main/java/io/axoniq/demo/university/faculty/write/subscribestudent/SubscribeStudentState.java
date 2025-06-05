@@ -4,7 +4,11 @@ import io.axoniq.demo.university.faculty.events.CourseCreatedEvent;
 import io.axoniq.demo.university.faculty.events.StudentEnrolledIntoFacultyEvent;
 import io.axoniq.demo.university.faculty.events.StudentSubscribedToCourseEvent;
 import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.eventsourcing.annotation.EventCriteriaBuilder;
 import org.axonframework.eventsourcing.annotation.EventSourcedEntity;
+import org.axonframework.eventsourcing.eventstore.EventCriteria;
+import org.axonframework.eventsourcing.eventstore.Tag;
+import org.axonframework.messaging.QualifiedName;
 
 import java.util.UUID;
 
@@ -65,5 +69,20 @@ public class SubscribeStudentState {
 
     public boolean studentHasNoMoreTime() {
         return subscribedToCoursesCount >= 3;
+    }
+
+    @EventCriteriaBuilder
+    public static EventCriteria criteriaBuilder(SubscriptionId subscriptionId) {
+        return EventCriteria.havingTags(new Tag("courseId", subscriptionId.courseId().toString()))
+                            .andBeingOneOfTypes(
+                                    new QualifiedName(CourseCreatedEvent.class),
+                                    new QualifiedName(StudentSubscribedToCourseEvent.class)
+                            )
+                            .or()
+                            .havingTags(new Tag("studentId", subscriptionId.studentId().toString()))
+                            .andBeingOneOfTypes(
+                                    new QualifiedName(StudentEnrolledIntoFacultyEvent.class),
+                                    new QualifiedName(StudentSubscribedToCourseEvent.class)
+                            );
     }
 }
