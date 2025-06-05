@@ -3,6 +3,8 @@ package io.axoniq.demo.university;
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseCommand;
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseConfiguration;
 import io.axoniq.demo.university.faculty.write.subscribestudent.SubscribeStudentToCourseConfiguration;
+import org.axonframework.axonserver.connector.AxonServerConnectionManager;
+import org.axonframework.axonserver.connector.event.AxonServerEventStorageEngine;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.common.infra.ComponentDescriptor;
 import org.axonframework.common.infra.FilesystemStyleComponentDescriptor;
@@ -25,6 +27,11 @@ public class AxonUniversity {
 
     public static EventSourcingConfigurer mainConfigurer() {
         return EventSourcingConfigurer.create()
+                                      .registerEventStorageEngine(c -> new AxonServerEventStorageEngine(
+                                              c.getComponent(AxonServerConnectionManager.class)
+                                               .getConnection("university"),
+                                              new TestConverter()
+                                      ))
                                       .registerStatefulCommandHandlingModule(
                                               CreateCourseConfiguration.createCourseCommandModule()
                                       )
