@@ -36,3 +36,6 @@ replay_pid*
 
 # MacOS makes this one
 .DS_Store
+
+# Maven build artifacts can be ignored
+target/
