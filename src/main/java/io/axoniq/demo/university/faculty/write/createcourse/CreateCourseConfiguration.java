@@ -5,8 +5,8 @@ import org.axonframework.commandhandling.GenericCommandResultMessage;
 import org.axonframework.configuration.Configuration;
 import org.axonframework.eventhandling.gateway.EventAppender;
 import org.axonframework.eventsourcing.configuration.EventSourcedEntityBuilder;
-import org.axonframework.eventsourcing.eventstore.EventCriteria;
-import org.axonframework.eventsourcing.eventstore.Tag;
+import org.axonframework.eventstreaming.EventCriteria;
+import org.axonframework.eventstreaming.Tag;
 import org.axonframework.messaging.MessageStream;
 import org.axonframework.messaging.MessageType;
 import org.axonframework.messaging.QualifiedName;
@@ -63,8 +63,8 @@ public class CreateCourseConfiguration {
     private static EventSourcedEntityBuilder<UUID, CreateCourseState> createCourseEntity() {
         return EventSourcedEntityBuilder.entity(UUID.class, CreateCourseState.class)
                                         .entityFactory(c -> (entityType, id) -> new CreateCourseState())
-                                        .criteriaResolver(c -> id -> EventCriteria.havingTags(
-                                                new Tag("courseId", id.toString())
+                                        .criteriaResolver(c -> (identifier, context) -> EventCriteria.havingTags(
+                                                new Tag("courseId", identifier.toString())
                                         ))
                                         .entityEvolver(c -> (entity, event, context) -> {
                                             if (event.getPayload() instanceof CourseCreatedEvent courseCreated) {
