@@ -2,6 +2,7 @@ package io.axoniq.demo.university;
 
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseCommand;
 import io.axoniq.demo.university.faculty.write.createcourse.CreateCourseConfiguration;
+import io.axoniq.demo.university.faculty.write.subscribestudent.SubscribeStudentToCourseCommand;
 import io.axoniq.demo.university.faculty.write.subscribestudent.SubscribeStudentToCourseConfiguration;
 import org.axonframework.axonserver.connector.AxonServerConnectionManager;
 import org.axonframework.axonserver.connector.event.AxonServerEventStorageEngine;
@@ -53,6 +54,7 @@ public class AxonUniversity {
         UUID courseId = UUID.randomUUID();
         successfulCreateCourseRun(commandGateway, courseId);
         faultyCreateCourseRun(commandGateway, courseId);
+        subscribeStudentToCourseRun(commandGateway, courseId);
     }
 
     private static void successfulCreateCourseRun(CommandGateway commandGateway, UUID courseId) {
@@ -76,5 +78,13 @@ public class AxonUniversity {
         } catch (Exception e) {
             logger.info("Could not create another course with the same identifier, as expected!");
         }
+    }
+
+    private static void subscribeStudentToCourseRun(CommandGateway commandGateway, UUID courseId) {
+        logger.info("Starting subscribe student to course flow...");
+        UUID studentId = UUID.randomUUID();
+        commandGateway.send(new SubscribeStudentToCourseCommand(studentId, courseId), null, Void.class)
+                      .join();
+        logger.info("Check the event store!");
     }
 }
